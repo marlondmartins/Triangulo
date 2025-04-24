@@ -1,0 +1,83 @@
+unit TipoTriangulo;
+
+interface
+
+type
+  TTriangulo = class
+
+  private
+    FLadoA, FLadoB, FLadoC: Double;
+
+    function getPerimetro: Double;
+    function getArea: Double;
+    function getTipo: string;
+
+  public
+    constructor Create(ALadoA, ALadoB, ALadoC: Double);
+
+    property LadoA: Double read FLadoA write FLadoA;
+    property LadoB: Double read FLadoB write FLadoB;
+    property LadoC: Double read FLadoC write FLadoC;
+    property Perimetro: Double read getPerimetro;
+    property Area: Double read getArea;
+    property Tipo: string read getTipo;
+
+    function Valida: Boolean;
+  end;
+
+implementation
+
+uses
+  Math, SysUtils;
+
+{ TTriangulo }
+
+constructor TTriangulo.Create(ALadoA, ALadoB, ALadoC: Double);
+begin
+  FLadoA := ALadoA;
+  FLadoB := ALadoB;
+  FLadoC := ALadoC;
+end;
+
+function TTriangulo.Valida: Boolean;
+begin
+  Result := (FLadoA + FLadoB > FLadoC) and
+            (FLadoA + FLadoC > FLadoB) and
+            (FLadoB + FLadoC > FLadoA);
+end;
+
+function TTriangulo.getPerimetro: Double;
+begin
+  if not Valida then
+    Result := 0.00
+  else Result := (FLadoA + FLadoB + FLadoC);
+end;
+
+function TTriangulo.getArea: Double;
+var
+  Perimetro: Double;
+begin
+  if Valida then
+  begin
+    Perimetro := (getPerimetro / 2);
+    Result := Sqrt(Perimetro * (Perimetro - FLadoA) * (Perimetro - FLadoB) * (Perimetro - FLadoC));
+  end
+  else Result := 0.00;
+end;
+
+function TTriangulo.getTipo: string;
+begin
+  if Valida then
+  begin
+    if (FLadoA = FLadoB) and (FLadoB = FLadoC) then
+      Result := 'Equilátero'
+    else
+    if (FLadoA = FLadoB) or (FLadoA = FLadoC) or (FLadoB = FLadoC) then
+      Result := 'Isósceles'
+    else Result := 'Escaleno';
+  end
+  else Result := 'Inválido';
+end;
+
+end.
+

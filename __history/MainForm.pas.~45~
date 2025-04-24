@@ -1,0 +1,129 @@
+unit MainForm;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, JvExControls, JvLabel,
+  Vcl.StdCtrls, Vcl.ExtDlgs, cxGraphics, cxControls, cxLookAndFeels,
+  cxLookAndFeelPainters, cxContainer, cxEdit, dxSkinsCore, dxSkinBasic,
+  dxSkinBlack, dxSkinOffice2019Black, dxSkinOffice2019Colorful,
+  dxSkinOffice2019DarkGray, dxSkinOffice2019White, dxSkinTheBezier,
+  dxSkinsDefaultPainters, dxSkinWXI, cxTextEdit, cxCurrencyEdit;
+
+type
+  TfrmMain = class(TForm)
+    pnlMain: TPanel;
+    pnlRodape: TPanel;
+    pnlPadrao: TPanel;
+    imgTriangulo: TImage;
+    btnCalcular: TButton;
+    edtLadoA: TcxCurrencyEdit;
+    edtLadoB: TcxCurrencyEdit;
+    edtLadoC: TcxCurrencyEdit;
+    edtTipo: TLabel;
+    Label53: TLabel;
+    Label1: TLabel;
+    Label2: TLabel;
+    lbArea: TLabel;
+    edtArea: TcxCurrencyEdit;
+    edtPerimetro: TcxCurrencyEdit;
+    Label4: TLabel;
+    procedure FormShow(Sender: TObject);
+    procedure btnCalcularClick(Sender: TObject);
+  private
+    { Private declarations }
+    procedure AtualizaFoto(pTipo: String = '');
+    procedure MontaTriangulo;
+    procedure setValores;
+    procedure setTipoTriangulo(pTipo: String; pPerimetro, pArea: Double);
+  public
+    { Public declarations }
+  end;
+
+var
+  frmMain: TfrmMain;
+
+implementation
+
+{$R *.dfm}
+
+uses GIFImg, TipoTriangulo;
+
+procedure TfrmMain.btnCalcularClick(Sender: TObject);
+begin
+  MontaTriangulo;
+end;
+
+procedure TfrmMain.MontaTriangulo;
+var
+  Tri: TTriangulo;
+  wl_LadoA,
+  wl_LadoB,
+  wl_LadoC: Double;
+begin
+  wl_LadoA := edtLadoA.EditValue;
+  wl_LadoB := edtLadoB.EditValue;
+  wl_LadoC := edtLadoC.EditValue;
+
+  Tri := TTriangulo.Create(wl_LadoA, wl_LadoB, wl_LadoC);
+  try
+    setTipoTriangulo(Tri.Tipo, Tri.Perimetro, Tri.Area);
+  finally
+    Tri.Free;
+  end;
+end;
+
+procedure TfrmMain.setTipoTriangulo(pTipo: String; pPerimetro, pArea: Double);
+begin
+  edtTipo.Font.Color := clWindowText;
+  edtTipo.Caption := '';
+  
+  edtArea.EditValue := 0.00;
+  edtPerimetro.EditValue := 0.00;
+
+  if pTipo <> '' then
+    edtTipo.Caption := pTipo;
+
+  if pArea > 0.00 then
+    edtArea.EditValue := pArea;  
+
+  if pPerimetro > 0.00 then
+    edtPerimetro.EditValue := pPerimetro;  
+
+  if pTipo = 'Inválido' then
+    edtTipo.Font.Color := clRed;
+
+  AtualizaFoto(pTipo);
+end;
+
+procedure TfrmMain.setValores;
+begin
+  edtLadoA.EditValue := 0.00;
+  edtLadoB.EditValue := 0.00;
+  edtLadoC.EditValue := 0.00;
+end;
+
+procedure TfrmMain.FormShow(Sender: TObject);
+begin   
+  pnlRodape.Caption := ' Desenvolvido por MARLON MARTINS | (85) 99860-0357 | marlondm13@gmail.com ';
+  AtualizaFoto;
+  setValores;
+end;
+
+procedure TfrmMain.AtualizaFoto(pTipo: String = '');
+begin
+  if (pTipo = '') or (pTipo = 'Inválido') then   
+    imgTriangulo.Picture.LoadFromFile(ExtractFilePath(Application.ExeName)+'SemFoto.gif');
+
+  if pTipo = 'Equilátero' then
+    imgTriangulo.Picture.LoadFromFile(ExtractFilePath(Application.ExeName)+'equilatero.jpg');
+
+  if pTipo = 'Isósceles' then
+    imgTriangulo.Picture.LoadFromFile(ExtractFilePath(Application.ExeName)+'isosceles.jpg');
+
+  if pTipo = 'Escaleno' then
+    imgTriangulo.Picture.LoadFromFile(ExtractFilePath(Application.ExeName)+'escaleno.jpg');
+end;
+
+end.
