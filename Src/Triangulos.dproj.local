@@ -10,12 +10,12 @@
     <Transaction>2024/10/15 15:09:57.000.855,=C:\Users\charles.dsn.shop\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2024/10/31 09:46:05.000.186,=C:\Users\charles.dsn.shop\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2025/01/13 09:17:46.000.621,=C:\Users\charles.dsn.shop\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>2025/01/13 09:18:24.000.098,C:\Users\charles.dsn.shop\Desktop\Triangulo\MainForm.dfm=C:\Users\charles.dsn.shop\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
-    <Transaction>2025/01/13 09:18:24.000.098,C:\Users\charles.dsn.shop\Desktop\Triangulo\MainForm.pas=C:\Users\charles.dsn.shop\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>2025/01/13 09:18:31.000.883,C:\Users\charles.dsn.shop\Desktop\Triangulo\Triangulos.dproj=C:\Users\charles.dsn.shop\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2025/01/13 09:18:24.000.098,C:\Users\charles.dsn.shop\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\Users\charles.dsn.shop\Desktop\Triangulo\MainForm.dfm</Transaction>
+    <Transaction>2025/01/13 09:18:24.000.098,C:\Users\charles.dsn.shop\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Users\charles.dsn.shop\Desktop\Triangulo\MainForm.pas</Transaction>
+    <Transaction>2025/01/13 09:18:31.000.883,C:\Users\charles.dsn.shop\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\charles.dsn.shop\Desktop\Triangulo\Triangulos.dproj</Transaction>
     <Transaction>2025/01/13 09:18:41.000.391,=C:\Users\charles.dsn.shop\Desktop\Triangulo\Unit1.pas</Transaction>
-    <Transaction>2025/01/13 09:19:09.000.283,C:\Users\charles.dsn.shop\Desktop\Triangulo\TipoTriangulo.pas=C:\Users\charles.dsn.shop\Desktop\Triangulo\Unit1.pas</Transaction>
+    <Transaction>2025/01/13 09:19:09.000.283,C:\Users\charles.dsn.shop\Desktop\Triangulo\Unit1.pas=C:\Users\charles.dsn.shop\Desktop\Triangulo\TipoTriangulo.pas</Transaction>
     <Transaction>2025/01/13 09:27:24.000.574,=C:\Users\charles.dsn.shop\Desktop\Triangulo\Unit1.pas</Transaction>
-    <Transaction>2025/01/13 09:27:49.000.255,C:\Users\charles.dsn.shop\Desktop\Triangulo\TrianguloFactory.pas=C:\Users\charles.dsn.shop\Desktop\Triangulo\Unit1.pas</Transaction>
+    <Transaction>2025/01/13 09:27:49.000.255,C:\Users\charles.dsn.shop\Desktop\Triangulo\Unit1.pas=C:\Users\charles.dsn.shop\Desktop\Triangulo\TrianguloFactory.pas</Transaction>
   </Transactions>
 </BorlandProject>
