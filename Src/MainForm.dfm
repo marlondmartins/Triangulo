@@ -1,0 +1,229 @@
+object frmMain: TfrmMain
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  ClientHeight = 275
+  ClientWidth = 461
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  Position = poScreenCenter
+  OnShow = FormShow
+  TextHeight = 15
+  object pnlMain: TPanel
+    Left = 0
+    Top = 0
+    Width = 461
+    Height = 275
+    Align = alClient
+    TabOrder = 0
+    object imgTriangulo: TImage
+      Left = 287
+      Top = 48
+      Width = 165
+      Height = 149
+      Stretch = True
+    end
+    object edtTipo: TLabel
+      Left = 287
+      Top = 203
+      Width = 165
+      Height = 30
+      Cursor = crHandPoint
+      Alignment = taCenter
+      AutoSize = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      WordWrap = True
+    end
+    object Label53: TLabel
+      Left = 7
+      Top = 48
+      Width = 44
+      Height = 14
+      Cursor = crHandPoint
+      AutoSize = False
+      Caption = 'Lado A'
+      WordWrap = True
+    end
+    object Label1: TLabel
+      Left = 73
+      Top = 48
+      Width = 44
+      Height = 14
+      Cursor = crHandPoint
+      AutoSize = False
+      Caption = 'Lado B'
+      WordWrap = True
+    end
+    object Label2: TLabel
+      Left = 139
+      Top = 48
+      Width = 44
+      Height = 14
+      Cursor = crHandPoint
+      AutoSize = False
+      Caption = 'Lado C'
+      WordWrap = True
+    end
+    object lbArea: TLabel
+      Left = 7
+      Top = 91
+      Width = 24
+      Height = 15
+      Cursor = crHandPoint
+      Caption = #193'rea'
+      WordWrap = True
+    end
+    object Label4: TLabel
+      Left = 73
+      Top = 91
+      Width = 52
+      Height = 15
+      Cursor = crHandPoint
+      Caption = 'Per'#237'metro'
+      WordWrap = True
+    end
+    object Label3: TLabel
+      Left = 7
+      Top = 137
+      Width = 258
+      Height = 16
+      Cursor = crHandPoint
+      AutoSize = False
+      Caption = 'Equil'#225'tero: Todos os tr'#234's lados s'#227'o iguais.'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsItalic]
+      ParentFont = False
+      WordWrap = True
+    end
+    object Label5: TLabel
+      Left = 7
+      Top = 153
+      Width = 258
+      Height = 16
+      Cursor = crHandPoint
+      AutoSize = False
+      Caption = 'Is'#243'sceles: Dois lados s'#227'o iguais e um '#233' diferente.'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsItalic]
+      ParentFont = False
+      WordWrap = True
+    end
+    object Label6: TLabel
+      Left = 7
+      Top = 169
+      Width = 258
+      Height = 16
+      Cursor = crHandPoint
+      AutoSize = False
+      Caption = 'Escaleno: Todos os lados diferentes.'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsItalic]
+      ParentFont = False
+      WordWrap = True
+    end
+    object pnlRodape: TPanel
+      Left = 1
+      Top = 250
+      Width = 459
+      Height = 24
+      Align = alBottom
+      TabOrder = 5
+    end
+    object pnlPadrao: TPanel
+      Left = 1
+      Top = 1
+      Width = 459
+      Height = 41
+      Align = alTop
+      Alignment = taLeftJustify
+      Caption = 'Tipos de Tri'#226'ngulo'
+      Color = 6447714
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 6
+    end
+    object btnCalcular: TButton
+      Left = 205
+      Top = 62
+      Width = 75
+      Height = 25
+      Caption = 'Calcular'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 7
+      OnClick = btnCalcularClick
+    end
+    object edtArea: TcxCurrencyEdit
+      Left = 7
+      Top = 107
+      Properties.DisplayFormat = '###,###,##0.00'
+      Properties.ReadOnly = True
+      Style.Color = clBtnFace
+      TabOrder = 3
+      Width = 60
+    end
+    object edtPerimetro: TcxCurrencyEdit
+      Left = 73
+      Top = 107
+      Properties.DisplayFormat = '###,###,##0.00'
+      Properties.ReadOnly = True
+      Style.Color = clBtnFace
+      TabOrder = 4
+      Width = 60
+    end
+    object edtLadoA: TcxCurrencyEdit
+      Left = 7
+      Top = 65
+      Properties.DisplayFormat = '###,###,##0.00'
+      Properties.ReadOnly = False
+      Style.Color = clWhite
+      TabOrder = 0
+      Width = 60
+    end
+    object edtLadoB: TcxCurrencyEdit
+      Left = 73
+      Top = 65
+      Properties.DisplayFormat = '###,###,##0.00'
+      Properties.ReadOnly = False
+      Style.Color = clWhite
+      TabOrder = 1
+      Width = 60
+    end
+    object edtLadoC: TcxCurrencyEdit
+      Left = 139
+      Top = 65
+      Properties.DisplayFormat = '###,###,##0.00'
+      Properties.ReadOnly = False
+      Style.Color = clWhite
+      TabOrder = 2
+      Width = 60
+    end
+  end
+end
