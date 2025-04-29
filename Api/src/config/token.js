@@ -37,9 +37,6 @@ function verifyJWT(req, res, next) {
     if (err) {
       return res.status(401).send({message: "Token inválido"});
     } else {
-      //
-      // realiza verficações de autorização no token valido antes de chamar next();
-      //
       next();
     }
   });

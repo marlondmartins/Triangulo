@@ -40,6 +40,7 @@ type
     procedure MontaTriangulo;
     procedure setValores;
     procedure setTipoTriangulo(pTipo: String; pPerimetro, pArea: Double);
+    function setCargaTriangulo(pTipo: String; pPerimetro, pArea, pLadoA, pLadoB, pLadoC: Double; out pJson, pErro: String): Boolean;
   public
     { Public declarations }
   end;
@@ -51,7 +52,10 @@ implementation
 
 {$R *.dfm}
 
-uses GIFImg, TipoTriangulo;
+uses GIFImg, TipoTriangulo, RESTRequest4D, System.JSON, Rest.Json;
+
+const
+  CS_URL = 'http://localhost:3001';
 
 procedure TfrmMain.btnCalcularClick(Sender: TObject);
 begin
@@ -64,6 +68,9 @@ var
   wl_LadoA,
   wl_LadoB,
   wl_LadoC: Double;
+  wl_Json, wl_Erro: String;
+  wl_Tipo: String;
+  wl_Perimetro, wl_Area: Double;
 begin
   wl_LadoA := StrToFloatDef(edtLadoA.Text, 0.00);
   wl_LadoB := StrToFloatDef(edtLadoB.Text, 0.00);
@@ -71,10 +78,65 @@ begin
   
   Tri := TTriangulo.Create(wl_LadoA, wl_LadoB, wl_LadoC);
   try
-    setTipoTriangulo(Tri.Tipo, Tri.Perimetro, Tri.Area);               
+    wl_Tipo := Tri.Tipo;
+    wl_Perimetro := Tri.Perimetro;
+    wl_Area := Tri.Area;
+
+    setTipoTriangulo(wl_Tipo, wl_Perimetro, wl_Area);
   finally
     Tri.Free;
   end;
+
+  if not setCargaTriangulo(wl_Tipo, wl_Perimetro, wl_Area, wl_LadoA, wl_LadoB, wl_LadoC, wl_Json, wl_Erro) then
+    Exit;
+end;
+
+function TfrmMain.setCargaTriangulo(pTipo: String; pPerimetro, pArea, pLadoA, pLadoB, pLadoC: Double; out pJson, pErro: String): Boolean;
+var
+  wl_Resp: IResponse;
+  jDados: TJsonObject;
+  arrDados: TJsonArray;
+  wl_Retorno: TStringList;
+begin
+  try
+    wl_Retorno:= TStringList.Create;
+    arrDados:= TJsonArray.Create;
+
+    jDados := TJsonObject.Create;
+    jDados.AddPair('tipo', pTipo);
+    jDados.AddPair('lado_a', pLadoA);
+    jDados.AddPair('lado_a', pLadoB);
+    jDados.AddPair('lado_a', pLadoC);
+    jDados.AddPair('Area', pArea);
+    jDados.AddPair('Perimetro', pPerimetro);
+
+    arrDados.add(jDados);
+
+    pJson := arrDados.toJson;
+    wl_Retorno.Text := pJson;
+    wl_Retorno.SaveTofile('CargaTriangulo.Json');
+
+    wl_Resp := TRequest.New.BaseURL(CS_URL)
+                .ContentType('application/json')
+                .Resource('v1/add/triangulo')
+                .AddBody(jDados)
+                .Accept('application/json')
+                .Post;
+
+
+    jDados:= TJsonObject(TJsonObject.ParseJsonValue(wl_Resp.Content));
+    wl_Retorno.Text:= pJson;
+    wl_Retorno.SaveTofile(ExtractFilePath(Application.ExeName)+'CargaTriangulo.Json');
+    FreeAndNil(wl_Retorno);
+
+    Result := (wl_Resp.StatusCode = 200);
+    pErro := wl_Resp.Content;
+  Except
+    On E: Exception do
+    begin
+      pErro := E.Message;
+    end;
+  End;
 end;
 
 procedure TfrmMain.setTipoTriangulo(pTipo: String; pPerimetro, pArea: Double);

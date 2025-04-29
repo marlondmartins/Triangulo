@@ -1,0 +1,196 @@
+unit MainForm;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, JvExControls, JvLabel,
+  Vcl.StdCtrls, Vcl.ExtDlgs, cxGraphics, cxControls, cxLookAndFeels,
+  cxLookAndFeelPainters, cxContainer, cxEdit, dxSkinsCore, dxSkinBasic,
+  dxSkinBlack, dxSkinOffice2019Black, dxSkinOffice2019Colorful,
+  dxSkinOffice2019DarkGray, dxSkinOffice2019White, dxSkinTheBezier,
+  dxSkinsDefaultPainters, dxSkinWXI, cxTextEdit, cxCurrencyEdit;
+
+type
+  TfrmMain = class(TForm)
+    pnlMain: TPanel;
+    pnlRodape: TPanel;
+    pnlPadrao: TPanel;
+    imgTriangulo: TImage;
+    btnCalcular: TButton;
+    edtTipo: TLabel;
+    Label53: TLabel;
+    Label1: TLabel;
+    Label2: TLabel;
+    lbArea: TLabel;
+    edtArea: TcxCurrencyEdit;
+    edtPerimetro: TcxCurrencyEdit;
+    Label4: TLabel;
+    Label3: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    edtLadoA: TcxCurrencyEdit;
+    edtLadoB: TcxCurrencyEdit;
+    edtLadoC: TcxCurrencyEdit;
+    procedure FormShow(Sender: TObject);
+    procedure btnCalcularClick(Sender: TObject);
+  private
+    { Private declarations }
+    procedure AtualizaFoto(pTipo: String = '');
+    procedure MontaTriangulo;
+    procedure setValores;
+    procedure setTipoTriangulo(pTipo: String; pPerimetro, pArea: Double);
+    function setCargaTriangulo(pTipo: String; pPerimetro, pArea, pLadoA, pLadoB, pLadoC: Double; out pJson, pErro: String): Boolean;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmMain: TfrmMain;
+
+implementation
+
+{$R *.dfm}
+
+uses GIFImg, TipoTriangulo, RESTRequest4D, System.JSON, Rest.Json;
+
+const
+  CS_URL = 'http://localhost:3001';
+
+procedure TfrmMain.btnCalcularClick(Sender: TObject);
+begin
+  MontaTriangulo;
+end;
+
+procedure TfrmMain.MontaTriangulo;
+var
+  Tri: TTriangulo;
+  wl_LadoA,
+  wl_LadoB,
+  wl_LadoC: Double;
+  wl_Json, wl_Erro: String;
+  wl_Tipo: String;
+  wl_Perimetro, wl_Area: Double;
+begin
+  wl_LadoA := StrToFloatDef(edtLadoA.Text, 0.00);
+  wl_LadoB := StrToFloatDef(edtLadoB.Text, 0.00);
+  wl_LadoC := StrToFloatDef(edtLadoC.Text, 0.00);
+  
+  Tri := TTriangulo.Create(wl_LadoA, wl_LadoB, wl_LadoC);
+  try
+    wl_Tipo := Tri.Tipo;
+    wl_Perimetro := Tri.Perimetro;
+    wl_Area := Tri.Area;
+
+    setTipoTriangulo(wl_Tipo, wl_Perimetro, wl_Area);
+  finally
+    Tri.Free;
+  end;
+
+  if not setCargaTriangulo(wl_Tipo, wl_Perimetro, wl_Area, wl_LadoA, wl_LadoB, wl_LadoC, wl_Json, wl_Erro) then
+    Exit;
+end;
+
+function TfrmMain.setCargaTriangulo(pTipo: String; pPerimetro, pArea, pLadoA, pLadoB, pLadoC: Double; out pJson, pErro: String): Boolean;
+var
+  wl_Resp: IResponse;
+  jDados: TJsonObject;
+  arrDados: TJsonArray;
+  wl_Retorno: TStringList;
+begin
+  try
+    wl_Retorno:= TStringList.Create;
+    arrDados:= TJsonArray.Create;
+
+    jDados := TJsonObject.Create;
+    jDados.AddPair('tipo', pTipo);
+    jDados.AddPair('lado_a', pLadoA);
+    jDados.AddPair('lado_a', pLadoB);
+    jDados.AddPair('lado_a', pLadoC);
+    jDados.AddPair('Area', pArea);
+    jDados.AddPair('Perimetro', pPerimetro);
+
+    arrDados.add(jDados);
+
+    pJson := arrDados.toJson;
+    wl_Retorno.Text := pJson;
+    wl_Retorno.SaveTofile('CargaTriangulo.Json');
+
+    wl_Resp := TRequest.New.BaseURL(CS_URL)
+                .ContentType('application/json')
+                .Resource('v1/add/triangulo')
+                .AddBody(jDados)
+                .Accept('application/json')
+                .Post;
+
+
+    jDados:= TJsonObject(TJsonObject.ParseJsonValue(wl_Resp.Content));
+    wl_Retorno.Text:= pJson;
+    wl_Retorno.SaveTofile(ExtractFilePath(Application.ExeName)+'CargaTriangulo.Json');
+    FreeAndNil(wl_Retorno);
+
+    Result := (wl_Resp.StatusCode = 200);
+    pErro := wl_Resp.Content;
+  Except
+    On E: Exception do
+    begin
+      pErro := E.Message;
+    end;
+  End;
+end;
+
+procedure TfrmMain.setTipoTriangulo(pTipo: String; pPerimetro, pArea: Double);
+begin
+  edtTipo.Font.Color := clWindowText;
+  edtTipo.Caption := '';
+  
+  edtArea.EditValue := 0.00;
+  edtPerimetro.EditValue := 0.00;
+
+  if pTipo <> '' then
+    edtTipo.Caption := pTipo;
+
+  if pArea > 0.00 then
+    edtArea.EditValue := pArea;  
+
+  if pPerimetro > 0.00 then
+    edtPerimetro.EditValue := pPerimetro;  
+
+  if pTipo = 'Inválido' then
+    edtTipo.Font.Color := clRed;
+
+  AtualizaFoto(pTipo);
+end;
+
+procedure TfrmMain.setValores;
+begin
+  edtLadoA.EditValue := 0.00;
+  edtLadoB.EditValue := 0.00;
+  edtLadoC.EditValue := 0.00;
+  edtArea.EditValue := 0.00;
+  edtPerimetro.EditValue := 0.00;
+end;
+
+procedure TfrmMain.FormShow(Sender: TObject);
+begin   
+  pnlRodape.Caption := ' Desenvolvido por MARLON MARTINS | (85) 99860-0357 | marlondm13@gmail.com ';
+  AtualizaFoto;
+  setValores;
+end;
+
+procedure TfrmMain.AtualizaFoto(pTipo: String = '');
+begin
+  if (pTipo = '') or (pTipo = 'Inválido') then   
+    imgTriangulo.Picture.LoadFromFile(ExtractFilePath(Application.ExeName)+'SemFoto.gif');
+
+  if pTipo = 'Equilátero' then
+    imgTriangulo.Picture.LoadFromFile(ExtractFilePath(Application.ExeName)+'equilatero.jpg');
+
+  if pTipo = 'Isósceles' then
+    imgTriangulo.Picture.LoadFromFile(ExtractFilePath(Application.ExeName)+'isosceles.jpg');
+
+  if pTipo = 'Escaleno' then
+    imgTriangulo.Picture.LoadFromFile(ExtractFilePath(Application.ExeName)+'escaleno.jpg');
+end;
+
+end.
